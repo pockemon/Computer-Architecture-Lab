@@ -5,7 +5,7 @@
 #define BLOCK_SIZE 1024
 #define NUM 8192238
 
-//Check Error
+//Error checking
 #define printError(func)                                                \
 {                                                                       \
   cudaError_t E  = func;                                                \
@@ -21,9 +21,6 @@ __global__ void reduce(float *inData, float* outData)
   __shared__ int sharedData[1024];
   unsigned int tid = threadIdx.x;
   unsigned int i = blockDim.x * blockIdx.x + tid;
-
-//  if(i>=NUM)
-//    return;
 
   sharedData[tid] = inData[i];
   __syncthreads();
@@ -57,7 +54,7 @@ int main()
 
   int i;
 
-  for(i=0; i<NUM; i++)                //Initialise Input data
+  for(i=0; i<NUM; i++)              
   {
     arr[i] = 1;
   }
@@ -70,20 +67,13 @@ int main()
 
   printError(cudaMalloc((void **)&deviceInput,  NUM * sizeof(float)));
   printError(cudaMalloc((void **)&deviceOutput, sizeof(float)));
-
-//  deviceOutput[0] = 0;
+  
   cudaMemcpy(deviceInput, arr, NUM * sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(deviceOutput, out, sizeof(float), cudaMemcpyHostToDevice);
 
   reduce<<<n_out, 1024>>>(deviceInput, deviceOutput);
 
   cudaMemcpy(out, deviceOutput, sizeof(float), cudaMemcpyDeviceToHost);
-
-/*  for (i = 1; i < n_out; i++)
-  {
-      out[0] += out[i];
-  }
-*/
   printf("Sum = %f\n", *out);
 
   cudaFree(deviceInput);
