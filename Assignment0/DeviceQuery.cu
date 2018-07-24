@@ -33,7 +33,7 @@ void getDevProp(struct cudaDeviceProp devProp)
                                                               
 int main()
 {   
-        struct udaDeviceProp devProp;
+        struct cudaDeviceProp devProp;
         cudaGetDeviceProperties(&devProp, 0);
         getDevProp(devProp);
 
