@@ -42,7 +42,7 @@ int main(void)
 
         // Initialize the host input vectors with random values
         printf("Initializing host input vectors...\n");
-        for (int i = 0; i < numElements; ++i)
+        for (int i = 0; i < num; ++i)
         {
                 h_A[i] = rand()/(float)RAND_MAX;
                 h_B[i] = rand()/(float)RAND_MAX;
